@@ -1,30 +1,80 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// import 'package:flutter/material.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:uyishi_83/bloc/quiz_bloc.dart';
+// import 'package:uyishi_83/models/question.dart';
+// import 'package:uyishi_83/screens/home_secreen.dart';
+
+// void main() {
+//   testWidgets('QuizScreen has an Image, a TextButton, and a Text widget', (WidgetTester tester) async {
+//     // Create a mock state to provide to the QuizBloc
+//     final mockState = QuizLoadSuccess(
+//       questions: [
+//         Question(question: 'Test savoli', answer: 'SUV', imageUrl: 'assets/suv.png'),
+//       ],
+//       currentQuestionIndex: 0,
+//       selectedLetters: [],
+//     );
+
+//     // Provide the necessary dependencies
+//     await tester.pumpWidget(
+//       BlocProvider(
+//         create: (context) => QuizBloc()..emit(mockState),
+//         child: MaterialApp(
+//           home: QuizScreen(),
+//         ),
+//       ),
+//     );
+
+//     // Allow the Bloc to load the initial state
+//     await tester.pumpAndSettle();
+
+//     // Verify the presence of an Image widget
+//     expect(find.byType(Image), findsOneWidget);
+
+//     // Verify the presence of a Text widget (the question text)
+//     expect(find.byType(Text), findsWidgets);
+
+//     // Verify the presence of at least one TextButton (elevated button for letter selection)
+//     expect(find.byType(ElevatedButton), findsWidgets);
+//   });
+// }
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:uyishi_83/main.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uyishi_83/bloc/quiz_bloc.dart';
+import 'package:uyishi_83/models/question.dart';
+import 'package:uyishi_83/screens/home_secreen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets("QuizScreen-da rasm, matn tugmasi va matn vidjeti mavjud",
+      (WidgetTester tester) async {
+    // Create a mock state to provide to the QuizBloc
+    final mockState = QuizState(
+      questions: [
+        Question(
+            question: 'Test savoli', answer: 'SUV', imageUrl: 'assets/suv.png'),
+      ],
+      currentQuestionIndex: 0,
+      selectedLetters: [],
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      BlocProvider(
+        create: (context) => QuizBloc()..emit(mockState),
+        child: MaterialApp(
+          home: QuizScreen(),
+        ),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(Image), findsOneWidget);
+
+    expect(find.text('Test savoli'), findsOneWidget);
+
+    expect(find.byType(ElevatedButton), findsWidgets);
   });
 }
